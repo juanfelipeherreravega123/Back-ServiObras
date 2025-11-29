@@ -19,8 +19,11 @@
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/Producto.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/Respaldo.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/Usuario.java
+/home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/dto/AddToCartDTO.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/dto/LoginDTO.java
+/home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/dto/ProductoCantidadRequest.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/dto/RegistroDTO.java
+/home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/modelo/dto/UsuarioRequest.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/repositorio/CarritoItemRepositorio.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/repositorio/CarritoRepositorio.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/repositorio/CotizacionRepositorio.java
@@ -30,6 +33,8 @@
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/repositorio/ProductoRepositorio.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/repositorio/RespaldoRepositorio.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/repositorio/UsuarioRepositorio.java
+/home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/security/JwtFilter.java
+/home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/security/JwtUtil.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/servicio/CarritoServicio.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/servicio/CotizacionServicio.java
 /home/felipe/NetBeansProjects/Backend/src/main/java/com/serviobra/demo/servicio/FacturaServicio.java

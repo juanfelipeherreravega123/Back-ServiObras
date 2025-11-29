@@ -2,30 +2,27 @@ package com.serviobra.demo.servicio;
 
 import com.serviobra.demo.modelo.Usuario;
 import com.serviobra.demo.repositorio.UsuarioRepositorio;
-
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Random;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UsuarioServicio {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-    
 
-    // Serivicio de Email- cambiar luego de implementacion
-    @Autowired(required = false)
+    @Autowired
     private JavaMailSender mailSender;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     // ============================
     //  REGISTRO
@@ -52,15 +49,13 @@ public class UsuarioServicio {
         String hash = passwordEncoder.encode(password);
         u.setContraseñaHash(hash);
 
-        
-        // Código de verificación
         String codigo = generarCodigoVerificacion();
         u.setVerificationToken(codigo);
         u.setVerified(false);
 
         usuarioRepositorio.save(u);
 
-        enviarCodigo(email, codigo);
+        enviarCodigo(email, nombre + " " + apellido, codigo);
 
         return u;
     }
@@ -69,13 +64,36 @@ public class UsuarioServicio {
         return String.format("%06d", new Random().nextInt(999999));
     }
 
-    private void enviarCodigo(String email, String codigo) {
-        SimpleMailMessage mensaje = new SimpleMailMessage();
-        mensaje.setTo(email);
-        mensaje.setSubject("Verificación de cuenta - ServiObras");
-        mensaje.setText("Tu código de verificación es: " + codigo);
+    private void enviarCodigo(String email, String nombre, String codigo) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        mailSender.send(mensaje);
+            String html = """
+                <div style="font-family: Arial; padding:20px; background:#f7f7f7;">
+                  <div style="max-width:600px;margin:auto;background:#ffffff;border-radius:10px;padding:30px;border:1px solid #ddd;">
+                    <h2 style="text-align:center;color:#2e7d32;margin-bottom:10px;">SERVIOBRA</h2>
+                    <p>Hola <strong>%s</strong>,</p>
+                    <p>Gracias por registrarte en <strong>ServiObra</strong>.</p>
+                    <p>Tu código de verificación es:</p>
+                    <h1 style="text-align:center;letter-spacing:10px;">%s</h1>
+                    <p>Ingresa este código en la plataforma para activar tu cuenta.</p>
+                    <hr>
+                    <p style="text-align:center;font-size:12px;color:#777;">
+                      © 2025 ServiObra. Todos los derechos reservados.
+                    </p>
+                  </div>
+                </div>
+                """.formatted(nombre, codigo);
+
+            helper.setTo(email);
+            helper.setSubject("Verificación de cuenta - ServiObras");
+            helper.setText(html, true);
+
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Error enviando correo: " + e.getMessage());
+        }
     }
 
     // ============================
@@ -88,13 +106,12 @@ public class UsuarioServicio {
             throw new RuntimeException("Usuario no encontrado");
         }
 
-       // Comparación con BCrypt
-    if (!passwordEncoder.matches(password, u.getContraseñaHash())) {
-        throw new RuntimeException("Contraseña incorrecta");
-    }
+        if (!passwordEncoder.matches(password, u.getContraseñaHash())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
 
         if (!Boolean.TRUE.equals(u.getVerified())) {
-            throw new RuntimeException("Debes verificar tu correo antes de iniciar sesión");
+            throw new RuntimeException("NO_VERIFICADO");
         }
 
         return u;
@@ -103,12 +120,21 @@ public class UsuarioServicio {
     // ============================
     //  VERIFICAR CÓDIGO
     // ============================
-    public boolean verificar(String email, String codigo) {
-        Usuario u = usuarioRepositorio.findByEmail(email);
+    public boolean verificar(String emailOrUsername, String codigo) {
+        // primero intenta por email
+        Usuario u = usuarioRepositorio.findByEmail(emailOrUsername);
 
-        if (u == null) return false;
+        // si no lo encuentra, intenta por username
+        if (u == null) {
+            u = usuarioRepositorio.findByUsername(emailOrUsername);
+        }
 
-        if (!codigo.equals(u.getVerificationToken())) return false;
+        if (u == null) {
+            return false;
+        }
+        if (!codigo.equals(u.getVerificationToken())) {
+            return false;
+        }
 
         u.setVerified(true);
         u.setVerificationToken(null);
@@ -116,4 +142,5 @@ public class UsuarioServicio {
 
         return true;
     }
+
 }

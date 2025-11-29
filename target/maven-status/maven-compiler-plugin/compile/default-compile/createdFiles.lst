@@ -4,13 +4,16 @@ com/serviobra/demo/controlador/UsuarioControlador.class
 com/serviobra/demo/controlador/FacturaControlador.class
 com/serviobra/demo/controlador/HistorialControlador.class
 com/serviobra/demo/modelo/dto/RegistroDTO.class
+com/serviobra/demo/security/JwtUtil.class
 com/serviobra/demo/controlador/CotizacionControlador.class
 com/serviobra/demo/servicio/UsuarioServicio.class
 com/serviobra/demo/modelo/MovimientoStock.class
 com/serviobra/demo/servicio/ProductoServicio.class
 com/serviobra/demo/repositorio/MovimientoStockRepositorio.class
+com/serviobra/demo/modelo/dto/UsuarioRequest.class
 com/serviobra/demo/controlador/CarritoControlador.class
 com/serviobra/demo/repositorio/PedidoRepositorio.class
+com/serviobra/demo/security/JwtFilter.class
 com/serviobra/demo/modelo/Respaldo.class
 com/serviobra/demo/config/SecurityConfig.class
 com/serviobra/demo/servicio/CotizacionServicio.class
@@ -20,6 +23,7 @@ com/serviobra/demo/servicio/PedidoServicio.class
 com/serviobra/demo/repositorio/CotizacionRepositorio.class
 com/serviobra/demo/controlador/FacturacionControlador.class
 com/serviobra/demo/modelo/Producto.class
+com/serviobra/demo/modelo/dto/AddToCartDTO.class
 com/serviobra/demo/modelo/Factura.class
 com/serviobra/demo/modelo/CarritoItem.class
 com/serviobra/demo/controlador/PedidoControlador.class
@@ -30,6 +34,7 @@ com/serviobra/demo/servicio/RespaldoServicio.class
 com/serviobra/demo/modelo/Admin.class
 com/serviobra/demo/repositorio/ProductoRepositorio.class
 com/serviobra/demo/modelo/Usuario.class
+com/serviobra/demo/modelo/dto/ProductoCantidadRequest.class
 com/serviobra/demo/controlador/AuthControlador.class
 com/serviobra/demo/repositorio/FacturaRepositorio.class
 com/serviobra/demo/repositorio/CarritoItemRepositorio.class
