@@ -24,10 +24,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
+        // Rutas públicas corregidas
         if (
-            path.startsWith("/auth/login") ||
-            path.startsWith("/auth/registrar") ||
-            path.startsWith("/auth/verificar") ||
+            path.startsWith("/api/auth/login") ||
+            path.startsWith("/api/auth/registrar") ||
+            path.startsWith("/api/auth/verificar") ||
             path.startsWith("/api/usuarios/registrar") ||
             path.startsWith("/api/usuarios/verificar")
         ) {
@@ -35,6 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
+        // Token
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -49,8 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
+        // Si todo está bien, continuar
         filterChain.doFilter(request, response);
     }
 }
-
-

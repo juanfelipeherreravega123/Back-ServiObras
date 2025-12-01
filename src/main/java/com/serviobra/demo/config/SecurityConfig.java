@@ -27,9 +27,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/auth/login",
-                    "/auth/registrar",
-                    "/auth/verificar",
+                    "/api/auth/login",
+                    "/api/auth/registrar",
+                    "/api/auth/verificar",
                     "/api/usuarios/registrar",
                     "/api/usuarios/verificar"
                 ).permitAll()
@@ -56,7 +56,7 @@ public class SecurityConfig {
         ));
 
         configuration.setAllowedMethods(List.of(
-            "GET","POST","PUT","DELETE","OPTIONS"
+            "GET", "POST", "PUT", "DELETE", "OPTIONS"
         ));
 
         configuration.setAllowedHeaders(List.of("*"));
