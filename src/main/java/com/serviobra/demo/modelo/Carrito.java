@@ -11,7 +11,7 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_carrito;
 
-    private Long id_usuario;
+    private Long idUsuario;
     private String estado;
 
     @Column(columnDefinition = "TIMESTAMP")
@@ -39,8 +39,8 @@ public class Carrito {
     public Long getId_carrito() { return id_carrito; }
     public void setId_carrito(Long id) { this.id_carrito = id; }
 
-    public Long getId_usuario() { return id_usuario; }
-    public void setId_usuario(Long id) { this.id_usuario = id; }
+    public Long getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }
 
     public String getEstado() { return estado; }
     public void setEstado(String e) { this.estado = e; }
@@ -53,6 +53,5 @@ public class Carrito {
 
     public Double getTotal() { return total; }
     public void setTotal(Double total) { this.total = total; }
+
 }
-
-

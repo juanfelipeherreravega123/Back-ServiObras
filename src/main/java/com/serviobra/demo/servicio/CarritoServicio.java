@@ -1,14 +1,12 @@
 package com.serviobra.demo.servicio;
 
 import com.serviobra.demo.modelo.Carrito;
-import com.serviobra.demo.modelo.CarritoItem;
-import com.serviobra.demo.modelo.Producto;
-import com.serviobra.demo.repositorio.CarritoItemRepositorio;
 import com.serviobra.demo.repositorio.CarritoRepositorio;
-import com.serviobra.demo.repositorio.ProductoRepositorio;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.serviobra.demo.modelo.CarritoItem;
+
+import java.util.List;
 
 @Service
 public class CarritoServicio {
@@ -16,43 +14,51 @@ public class CarritoServicio {
     @Autowired
     private CarritoRepositorio carritoRepo;
 
-    @Autowired
-    private CarritoItemRepositorio itemRepo;
-
-    @Autowired
-    private ProductoRepositorio productoRepo;
-
-    // Crear carrito (recibe un Carrito completo desde el controlador)
-    public Carrito crearCarrito(Carrito c) {
-        c.setFecha_creacion(new java.sql.Timestamp(System.currentTimeMillis()));
-        c.setEstado("abierto");
-        return carritoRepo.save(c);
+    public Carrito crearCarrito(Carrito carrito) {
+        return carritoRepo.save(carrito);
     }
 
-    // Obtener carrito por ID
-    public Carrito obtener(Long carritoId) {
-        return carritoRepo.findById(carritoId).orElse(null);
+    public List<Carrito> obtenerTodos() {
+        return carritoRepo.findAll();
     }
 
-    // Agregar producto al carrito
-    public CarritoItem agregarProducto(Long carritoId, Long productoId, Integer cantidad) {
-
-        Carrito carrito = carritoRepo.findById(carritoId).orElse(null);
-        Producto producto = productoRepo.findById(productoId).orElse(null);
-
-        if (carrito == null || producto == null) return null;
-
-        CarritoItem item = new CarritoItem();
-        item.setId_carrito(carritoId);
-        item.setId_producto(productoId);
-        item.setCantidad(cantidad);
-
-        if (producto.getPrecio_unitario() != null && cantidad != null) {
-            item.setSubtotal(producto.getPrecio_unitario() * cantidad);
-        }
-
-        return itemRepo.save(item);
+    public Carrito obtenerPorId(Long id) {
+        return carritoRepo.findById(id).orElse(null);
     }
+
+    public List<Carrito> obtenerPorUsuario(Long idUsuario) {
+        return carritoRepo.findByIdUsuario(idUsuario);
+    }
+
+    public Carrito actualizarCarrito(Long id, Carrito datos) {
+        Carrito carrito = carritoRepo.findById(id).orElse(null);
+        if (carrito == null) return null;
+
+        carrito.setEstado(datos.getEstado());
+        carrito.setIdUsuario(datos.getIdUsuario());
+
+        return carritoRepo.save(carrito);
+    }
+
+    public void eliminarCarrito(Long id) {
+        carritoRepo.deleteById(id);
+    }
+	public Carrito agregarItem(Long carritoId, CarritoItem nuevoItem) {
+
+    Carrito carrito = carritoRepo.findById(carritoId)
+            .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+
+    // Asignar relación
+    nuevoItem.setIdCarrito(carrito.getId_carrito());
+    nuevoItem.setCarrito(carrito);
+
+    // Agregar item
+    carrito.getItems().add(nuevoItem);
+
+    // Recalcular total
+    carrito.calcularTotal();
+
+    return carritoRepo.save(carrito);
 }
 
-
+}

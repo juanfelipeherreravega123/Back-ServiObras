@@ -8,42 +8,51 @@ public class CarritoItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_item;
+    private Long idItem;
 
-    private Long id_carrito;
-    private Long id_producto;
+    @Column(name = "id_carrito")
+    private Long idCarrito;
+
+    @Column(name = "id_producto")
+    private Long idProducto;
+
     private Integer cantidad;
     private Double subtotal;
 
     @ManyToOne
-    @JoinColumn(name = "id_carrito", referencedColumnName = "id_carrito", insertable = false, updatable = false)
+    @JoinColumn(name = "id_carrito", insertable = false, updatable = false)
     private Carrito carrito;
 
+    @Column(name = "id_cotizacion")
+    private Long idCotizacion;
+
     @ManyToOne
-    @JoinColumn(name = "id_cotizacion", referencedColumnName = "id_cotizacion", insertable = false, updatable = false)
-    private Cotizacion cotizacion; // Relación con Cotización
+    @JoinColumn(name = "id_cotizacion", insertable = false, updatable = false)
+    private Cotizacion cotizacion;
 
-    // Getters y setters
-    public Long getId_item() { return id_item; }
-    public void setId_item(Long id) { this.id_item = id; }
+    // GETTERS & SETTERS
 
-    public Long getId_carrito() { return id_carrito; }
-    public void setId_carrito(Long id) { this.id_carrito = id; }
+    public Long getIdItem() { return idItem; }
+    public void setIdItem(Long idItem) { this.idItem = idItem; }
 
-    public Long getId_producto() { return id_producto; }
-    public void setId_producto(Long id) { this.id_producto = id; }
+    public Long getIdCarrito() { return idCarrito; }
+    public void setIdCarrito(Long idCarrito) { this.idCarrito = idCarrito; }
+
+    public Long getIdProducto() { return idProducto; }
+    public void setIdProducto(Long idProducto) { this.idProducto = idProducto; }
 
     public Integer getCantidad() { return cantidad; }
-    public void setCantidad(Integer c) { this.cantidad = c; }
+    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
 
     public Double getSubtotal() { return subtotal; }
-    public void setSubtotal(Double s) { this.subtotal = s; }
+    public void setSubtotal(Double subtotal) { this.subtotal = subtotal; }
+
+    public Long getIdCotizacion() { return idCotizacion; }
+    public void setIdCotizacion(Long idCotizacion) { this.idCotizacion = idCotizacion; }
 
     public Carrito getCarrito() { return carrito; }
     public void setCarrito(Carrito carrito) { this.carrito = carrito; }
 
     public Cotizacion getCotizacion() { return cotizacion; }
-    public void setCotizacion(Cotizacion cotizacion) { this.cotizacion = cotizacion; }  // Agregar este setter
+    public void setCotizacion(Cotizacion cotizacion) { this.cotizacion = cotizacion; }
 }
-
- 

@@ -80,7 +80,7 @@ public class UsuarioServicio {
                     <p>Ingresa este código en la plataforma para activar tu cuenta.</p>
                     <hr>
                     <p style="text-align:center;font-size:12px;color:#777;">
-                      © 2025 ServiObra. Todos los derechos reservados.
+                      © 2025 ServiObras. Todos los derechos reservados.
                     </p>
                   </div>
                 </div>
@@ -142,5 +142,53 @@ public class UsuarioServicio {
 
         return true;
     }
+    
+    // ============================
+//  CREAR USUARIO (ADMIN PANEL)
+// ============================
+public Usuario crearDesdeAdmin(
+        String nombre,
+        String apellido,
+        String email,
+        String username,
+        String password,
+        String rol
+) {
 
+    // Validaciones
+    if (nombre == null || apellido == null || email == null ||
+        username == null || password == null || rol == null) {
+        throw new RuntimeException("Todos los campos son obligatorios");
+    }
+
+    if (usuarioRepositorio.findByEmail(email) != null) {
+        throw new RuntimeException("El correo ya está registrado");
+    }
+
+    if (usuarioRepositorio.findByUsername(username) != null) {
+        throw new RuntimeException("El nombre de usuario ya está en uso");
+    }
+
+    Usuario u = new Usuario();
+
+    u.setNombre(nombre);
+    u.setApellido(apellido);
+    u.setEmail(email);
+    u.setUsername(username);
+    u.setRol(rol);
+    u.setEstado("activo");
+    u.setFecha_registro(new Timestamp(System.currentTimeMillis()));
+
+    // Hash de contraseña
+    String hash = passwordEncoder.encode(password);
+    u.setContraseñaHash(hash);
+
+    // Admin crea usuario → ya verificado
+    u.setVerificationToken(null);
+    u.setVerified(true);
+
+    usuarioRepositorio.save(u);
+
+    return u;
+  }
 }

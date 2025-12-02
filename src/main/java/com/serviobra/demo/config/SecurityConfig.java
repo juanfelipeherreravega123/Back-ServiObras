@@ -23,20 +23,28 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/api/auth/login",
-                    "/api/auth/registrar",
-                    "/api/auth/verificar",
-                    "/api/usuarios/registrar",
-                    "/api/usuarios/verificar"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .httpBasic(httpBasic -> httpBasic.disable())
-            .formLogin(form -> form.disable());
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+
+                        // ENDPOINTS PÚBLICOS
+                        .requestMatchers(
+                                "/api/auth/login",
+                                "/api/auth/registrar",
+                                "/api/auth/verificar",
+                                "/api/sugerencias",
+                                "/api/sugerencias/**",
+                                "/api/productos/**",
+                                "/api/productos",
+                                "/api/cotizaciones/**",
+                                "/api/carritos/**",
+                                "/api/usuarios/**"
+                        ).permitAll()
+
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .formLogin(form -> form.disable());
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -49,16 +57,17 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(List.of(
-            "http://localhost:5500",
-            "http://127.0.0.1:5500",
-            "https://serviobrass.com",
-            "https://www.serviobrass.com"
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "http://localhost:5500",
+                "http://127.0.0.1:5500",
+                "http://localhost",
+                "http://127.0.0.1",
+                "https://serviobrass.com",
+                "https://www.serviobrass.com"
         ));
 
-        configuration.setAllowedMethods(List.of(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS"
-        ));
-
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
